@@ -3,101 +3,69 @@ package com.aldana.ejemplo14
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import com.aldana.ejemplo14.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
+    var score=Score("0","0")
     lateinit var scoreViewModel: ScoreViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        var binding: ActivityMainBinding = DataBindingUtil.setContentView(
+            this, R.layout.activity_main
+        )
 
         scoreViewModel = ViewModelProviders.of(this).get(ScoreViewModel::class.java)
+        score.score_A = scoreViewModel.scoreTeamA.toString()
+        score.score_B = scoreViewModel.scoreTeamB.toString()
+        binding.team = score
 
-        displayScore(
-            tv_score_team_a,
-            scoreViewModel.scoreTeamA
-        )
+        bt_team_a_free_throw.setOnClickListener {
+            scoreViewModel.scoreTeamA ++
+            score.score_A = scoreViewModel.scoreTeamA.toString()
+            binding.team = score
+        }
+        bt_team_b_free_throw.setOnClickListener {
+            scoreViewModel.scoreTeamB ++
+            score.score_B = scoreViewModel.scoreTeamA.toString()
+            binding.team = score
+        }
 
-        displayScore(
-            tv_score_team_b,
-            scoreViewModel.scoreTeamB
-        )
+        bt_team_a_2_p.setOnClickListener {
+            scoreViewModel.scoreTeamA +=2
+            score.score_A = scoreViewModel.scoreTeamA.toString()
+            binding.team = score
+        }
+        bt_team_b_2_p.setOnClickListener {
+            scoreViewModel.scoreTeamB +=2
+            score.score_B = scoreViewModel.scoreTeamA.toString()
+            binding.team = score
+        }
 
-        // TODO: El ViewModel es restaurado si ya existía, si no, se crea uno nuevo.
-        // TODO: Recuerde que el ViewModel solo sobrevive a cambios de configuración y no a la destrucción de la aplicación
+        bt_team_a_3_p.setOnClickListener {
+            scoreViewModel.scoreTeamA +=3
+            score.score_A = scoreViewModel.scoreTeamA.toString()
+            binding.team = score
+        }
+        bt_team_b_3_p.setOnClickListener {
+            scoreViewModel.scoreTeamB +=3
+            score.score_B = scoreViewModel.scoreTeamA.toString()
+            binding.team = score
+        }
 
-    }
-
-
-    // TODO: Accediendo y modificando datos almacenados en el ViewModel según el método utilizado
-
-    fun addOneTeamA(v: View) {
-        displayScore(
-            tv_score_team_a,
-            ++scoreViewModel.scoreTeamA
-        )
-    }
-
-    fun addOneTeamB(v: View) {
-        displayScore(
-            tv_score_team_b,
-            ++scoreViewModel.scoreTeamB
-        )
-    }
-
-    fun addTwoTeamA(v: View) {
-        scoreViewModel.scoreTeamA += 2
-        displayScore(
-            tv_score_team_a,
-            scoreViewModel.scoreTeamA
-        )
-    }
-
-    fun addTwoTeamB(v: View) {
-        scoreViewModel.scoreTeamB += 2
-        displayScore(
-            tv_score_team_b,
-            scoreViewModel.scoreTeamB
-        )
-    }
-
-    fun addThreeTeamA(v: View) {
-        scoreViewModel.scoreTeamA += 3
-        displayScore(
-            tv_score_team_a,
-            scoreViewModel.scoreTeamA
-        )
-    }
-
-    fun addThreeTeamB(v: View) {
-        scoreViewModel.scoreTeamB += 3
-        displayScore(
-            tv_score_team_b,
-            scoreViewModel.scoreTeamB
-        )
-    }
-
-    fun resetScores(v: View) {
-        scoreViewModel.scoreTeamA = 0
-        scoreViewModel.scoreTeamB = 0
-
-        displayScore(
-            tv_score_team_a,
-            scoreViewModel.scoreTeamA
-        )
-
-        displayScore(
-            tv_score_team_b,
-            scoreViewModel.scoreTeamB
-        )
-    } // TODO: Limpiando datos
-
-    fun displayScore(v: TextView, score: Int) {
-        v.text = score.toString()
+        bt_reset.setOnClickListener {
+            scoreViewModel.scoreTeamA = 0
+            scoreViewModel.scoreTeamB = 0
+            score.score_A = scoreViewModel.scoreTeamA.toString()
+            score.score_B = scoreViewModel.scoreTeamB.toString()
+            binding.team = score
+        }
     }
 
 }
